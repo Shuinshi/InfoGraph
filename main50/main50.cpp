@@ -45,31 +45,31 @@ GLint uniform_proj, uniform_view, uniform_model;
 
 
 void readData(){
-  ifstream file ( "villes2.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
+  ifstream file ( "../data/rankpts.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
 	string value;
 	getline ( file, value, '\n' );
 	while ( file.good() ) {
 
-	     getline ( file, value, ';' ); // read a string until next comma: http://www.cplusplus.com/reference/string/getline/
-	     string sinsee = string( value, 0, value.length() );
-	     getline ( file, value, ';' );
-	     string sname = string( value, 0, value.length() );
-	     getline ( file, value, ';' );
-	     string saltitude = string( value, 0, value.length() );
-	     getline ( file, value, ';' );
-	     string scp = string( value, 0, value.length() );
-	     getline ( file, value, ';' );
-	     string slon = string( value, 0, value.length() );
-	     float lon = stof(slon, NULL);
-	     getline ( file, value, ';' );
-	     string slat = string( value, 0, value.length() );
-	     float lat = stof(slat, NULL);
-	     getline ( file, value, ';' );
-	     string spop = string( value, 0, value.length() );
-	     getline ( file, value, '\n' );
+	     getline ( file, value, ',' ); // read a string until next comma: http://www.cplusplus.com/reference/string/getline/
+	     string villedep = string( value, 0, value.length() );
+	     getline ( file, value, ',' );
+	     string ranko = string( value, 0, value.length() );
+	     getline ( file, value, ',' );
+	     string ptso = string( value, 0, value.length() );
+	     getline ( file, value, ',' );
+	     string villej1 = string( value, 0, value.length() );
+	     getline ( file, value, ',' );
+	     string scorej1 = string( value, 0, value.length() );
+	     //float lon = stof(slon, NULL);
+	     getline ( file, value, ',' );
+	     string scorej2 = string( value, 0, value.length() );
+	     //float lat = stof(slat, NULL);
+	     getline ( file, value, ',' );
+	     string villej2 = string( value, 0, value.length() );
+	     /*getline ( file, value, '\n' );
 	     string ssur = string( value, 0, value.length() );
-
-	     cout << lon << " ... " << lat << endl; // display value 
+*/
+	     //cout << lon << " ... " << lat << endl; // display value 
 	}
 
 }
