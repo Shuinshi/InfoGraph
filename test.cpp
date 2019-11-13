@@ -1,3 +1,29 @@
+#include <stdio.h>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+using namespace std;
+
+#include <stdlib.h>
+#include <string.h>
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+using namespace glm;
 
 void readData(){
   ifstream file ( "../data/rankpts.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
@@ -24,15 +50,15 @@ void readData(){
 	     /*getline ( file, value, '\n' );
 	     string ssur = string( value, 0, value.length() );
 */
-	     //cout << lon << " ... " << lat << endl; // display value 
+	     //cout << lon << " ... " << lat << endl; // display value
 	}
 
 void readData(){
     int nbteam = nbteam;
     String Team;
     getline(
-    
-	void loadData(string fn, vector<int> &pts, vector<int> &ranks)	
+
+	void loadData(string fn, vector<int> &pts, vector<int> &ranks)
     	{
     	ifstream file ( "../data/rankpts.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
     	int pts [20][38];
