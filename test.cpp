@@ -56,19 +56,21 @@ void readData(){
 void loadData(string fn, vector<int> &pts, vector<int> &ranks)
     	{
     	ifstream file ( "../data/rankpts.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
-    	int pts [20][38];
+    	int points [20][38];
     	int rk [20][38];
-    	String nomTeam[20];
+    	int nbequipe = 20;
+    	string nomTeam[nbequipe];
+    	
     	for(int i = 0; i < nbequipe; i++)
     {
-        /*string value;
-        getline ( file, value, '\n' );
+        string value;
+        /*getline ( file, value, '\n' );
         int nbteam = nbteam;
         */
-        String Team;
+        string Team;
         getline(file, Team, ',');
-        nomTeam[i] = Team
-        int tabres [38][6]; //38j, 6 entrees par jour
+        nomTeam[i] = Team;
+        string tabres [38][6]; //38j, 6 entrees par jour
         int j = 0;
         while(file.good())
         {
