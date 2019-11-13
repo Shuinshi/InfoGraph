@@ -52,13 +52,8 @@ void readData(){
 */
 	     //cout << lon << " ... " << lat << endl; // display value
 	}
-
-void readData(){
-    int nbteam = nbteam;
-    String Team;
-    getline(
-
-	void loadData(string fn, vector<int> &pts, vector<int> &ranks)
+}
+void loadData(string fn, vector<int> &pts, vector<int> &ranks)
     	{
     	ifstream file ( "../data/rankpts.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
     	int pts [20][38];
@@ -79,18 +74,24 @@ void readData(){
         {
              getline ( file, value, ',' );
              string ranko = string( value, 0, value.length() );
+             tabres[i][0]=ranko;
              getline ( file, value, ',' );
              string ptso = string( value, 0, value.length() );
+             tabres[i][1]=ptso;
              getline ( file, value, ',' );
              string villej1 = string( value, 0, value.length() );
+             tabres[i][2]=villej1;
              getline ( file, value, ',' );
              string scorej1 = string( value, 0, value.length() );
              //float lon = stof(slon, NULL);
+             tabres[i][3]=scorej1;
              getline ( file, value, ',' );
              string scorej2 = string( value, 0, value.length() );
              //float lat = stof(slat, NULL);
+             tabres[i][4]=scorej2;
              getline( file, value, ',' );
              string villej2 = string( value, 0, value.length() );
+             tabres[i][5]=villej2;
         }
 
     }
