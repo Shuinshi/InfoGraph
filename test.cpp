@@ -56,7 +56,8 @@ void readData(){
 void loadData(string fn, vector<int> &pts, vector<int> &ranks)
     	{
     	ifstream file ( "../data/rankpts.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
-    	int points [20][38];
+    	//ifstream file (fn);
+    	/*int points [20][38];
     	int rk [20][38];
     	int nbequipe = 20;
     	string nomTeam[nbequipe];
@@ -67,7 +68,7 @@ void loadData(string fn, vector<int> &pts, vector<int> &ranks)
         /*getline ( file, value, '\n' );
         int nbteam = nbteam;
         */
-        string Team;
+       /* string Team;
         getline(file, Team, ',');
         nomTeam[i] = Team;
         string tabres [38][6]; //38j, 6 entrees par jour
@@ -97,5 +98,33 @@ void loadData(string fn, vector<int> &pts, vector<int> &ranks)
         }
 
     }
+    */
+    pts.clear;
+    ranks.clear
+    while ( file.good() ) 
+    {
+    ifstream file (fn);
+    getline ( file, value, ',' );
+    string ranko = string( value, 0, value.length() );
+    ranks.push_back(stio(ranko));
+    getline ( file, value, ',' );
+    string ptso = string( value, 0, value.length() );
+    pts.push_back(stoi(ptso));
+    getline ( file, value, ',' );
+    string villej1 = string( value, 0, value.length() );
+    //tabres[i][2]=villej1;
+    getline ( file, value, ',' );
+    string scorej1 = string( value, 0, value.length() );
+    //float lon = stof(slon, NULL);
+    //tabres[i][3]=scorej1;
+    getline ( file, value, ',' );
+    string scorej2 = string( value, 0, value.length() );
+    //float lat = stof(slat, NULL);
+    //tabres[i][4]=scorej2;
+    getline( file, value, ',' );
+    string villej2 = string( value, 0, value.length() );
+    //tabres[i][5]=villej2;
+    }
+    
 }
 
