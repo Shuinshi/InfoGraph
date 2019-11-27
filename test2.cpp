@@ -72,6 +72,12 @@ void loadData(string fn, vector<int> &pts, vector<int> &ranks)
             if (i % 41 == 40)
              getline(file, value, '\n');     
         }
+        int j = 0;
+        while(j < nomTeam.size())
+	{
+		cout << nomTeam[j] << endl;
+		j++;
+	}
 }
 
 int main(void)
