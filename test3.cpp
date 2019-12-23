@@ -64,7 +64,7 @@ GLFWwindow* window;
 // La texture d'alphabet
 GLuint texId;
 
-// la vitesse initiale
+// la vitesse initiale 
 float speed = 0.0; 
 
 // La taille de notre fenetre
@@ -298,26 +298,27 @@ void showGraph (vector<int> pts, vector<int> ranks, vector<String> teams){
 			int ptst = ptsd[index];
 			if (find(ptseq.begin(), ptseq.end(), ptst) != ptseq.end())
 				eq++;*/
-
+				//il me semble que dans l'ordre cest bas gauche, haut gauche, bas droite, nvx triangle avec haut droit, etc.
 			g_vertex_buffer_data[0 + i * 12 * 3] = d*longueurjournee;
-			g_vertex_buffer_data[1 + i * 12 * 3] = ptst*marge + eq*epaisseur;
+			g_vertex_buffer_data[1 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;  //FORMULE MAGIQUE
 			g_vertex_buffer_data[2 + i * 12 * 3] = hauteur;
-
+			
+			g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
+			g_vertex_buffer_data[7 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1 + epaisseur;
+			g_vertex_buffer_data[8 + i * 12 * 3] = hauteur;
+			
 			g_vertex_buffer_data[3 + i * 12 * 3] = d*(longueurjournee +1);
-			g_vertex_buffer_data[4 + i * 12 * 3] = ptst * marge + eq * epaisseur;
+			g_vertex_buffer_data[4 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;
 			g_vertex_buffer_data[5 + i * 12 * 3] = hauteur;
 
-			g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
-			g_vertex_buffer_data[7 + i * 12 * 3] = ptst * marge + (eq+1) * epaisseur;
-			g_vertex_buffer_data[8 + i * 12 * 3] = hauteur;
+			
 
+			
+			
+			
 			g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
-			g_vertex_buffer_data[10 + i * 8 * 3] = ptst * marge + (eq + 1) * epaisseur;
+			g_vertex_buffer_data[10 + i * 8 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1 + epaisseur;
 			g_vertex_buffer_data[11 + i * 8 * 3] = hauteur;
-
-
-
-
 
 			g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
 			g_vertex_buffer_data[7 + i * 12 * 3] = ptst * marge + (eq + 1) * epaisseur;
