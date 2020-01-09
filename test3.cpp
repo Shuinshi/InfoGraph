@@ -4,8 +4,8 @@
 
 // sous linux 	
 // g++ -I/usr/local/include/ -I/public/ig/glm/ -c main6.cpp  -omain6.o
-// g++ -I/usr/local main6.o -lglfw  -lGLEW  -lGL -lopencv_core -lopencv_imgproc -lopencv_highgui  -lopencv_imgcodecs -omain6
-// ./main6
+// g++ -I/usr/local test3.o -lglfw  -lGLEW  -lGL -lopencv_core -lopencv_imgproc -lopencv_highgui  -lopencv_imgcodecs -otest3
+// ./test3
 
 // Inclut les en-têtes standards
 #include <stdio.h>
@@ -208,29 +208,29 @@ GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path
 
 	// Link the program
 	printf("Linking program\n");
-	GLuint progID = glCreateProgram();
-	glAttachShader(progID, VertexShaderID);
-	glAttachShader(progID, FragmentShaderID);
-	glLinkProgram(progID);
+	GLuint programID = glCreateProgram();
+	glAttachShader(programID, VertexShaderID);
+	glAttachShader(programID, FragmentShaderID);
+	glLinkProgram(programID);
 
 
 	// Check the program
-	glGetProgramiv(progID, GL_LINK_STATUS, &Result);
-	glGetProgramiv(progID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	glGetProgramiv(programID, GL_LINK_STATUS, &Result);
+	glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &InfoLogLength);
 	if ( InfoLogLength > 0 ){
 		vector<char> ProgramErrorMessage(InfoLogLength+1);
-		glGetProgramInfoLog(progID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
+		glGetProgramInfoLog(programID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
 		printf("%s\n", &ProgramErrorMessage[0]);
 	}
 
 	
-	glDetachShader(progID, VertexShaderID);
-	glDetachShader(progID, FragmentShaderID);
+	glDetachShader(programID, VertexShaderID);
+	glDetachShader(programID, FragmentShaderID);
 	
 	glDeleteShader(VertexShaderID);
 	glDeleteShader(FragmentShaderID);
 
-	return progID;
+	return programID;
 }
 
 void showGraph (vector<int> pts, vector<int> ranks, vector<String> teams){
@@ -254,18 +254,23 @@ void showGraph (vector<int> pts, vector<int> ranks, vector<String> teams){
 	colorSize = 12 * nbdays * 3 * sizeof(GLfloat);  //*nbteams
 	texCoordSize = 3 * 2 * 5 * N * sizeof(GLfloat);
     
-    /*
+    for(int i = 0; i < 20; i++){
 	if (g_vertex_buffer_data[i] != NULL)
 		free(g_vertex_buffer_data[i]);
 
-	if (g_vertex_color_data != NULL)
-		free(g_vertex_color_data);
+	if (g_vertex_color_data[i] != NULL)
+		free(g_vertex_color_data[i]);
 
-	if (g_vertex_texcoord_data != NULL)
-		free(g_vertex_texcoord_data);
-
-	
-    */
+	if (g_vertex_texcoord_data[i] != NULL)
+		free(g_vertex_texcoord_data[i]);
+    
+    
+    }
+    for(int i = 0; i < 20; i++){
+	    g_vertex_buffer_data[i]   = (GLfloat*)malloc(vertexSize);
+	    g_vertex_color_data[i]    = (GLfloat*)malloc(colorSize);
+	    g_vertex_texcoord_data[i] = (GLfloat*)malloc(texCoordSize);
+    }
 
 
 	//for (int d = 0; d < nbdays; d++) {   //Moyen de trouver les abscisses?
@@ -291,84 +296,139 @@ void showGraph (vector<int> pts, vector<int> ranks, vector<String> teams){
 				ptsvu.erase(doublon);
 		}
 		*/
-		/*g_vertex_buffer_data = (GLfloat*)malloc(vertexSize);
-	    g_vertex_color_data = (GLfloat*)malloc(colorSize);
-	    g_vertex_texcoord_data = (GLfloat*)malloc(texCoordSize);*/
-		for(int i = 0; i < 1; i ++){
+		
+		for(int i = 0; i < 20; i ++){
 			/*int minrank = min_element(ranksd.begin(), ranksd.end());
 			int index = find(ranksd.begin(), ranksd.end(), minrank) - ranksd.begin();
 			int ptst = ptsd[index];
 			if (find(ptseq.begin(), ptseq.end(), ptst) != ptseq.end())
 				eq++;*/
 				//il me semble que dans l'ordre cest bas gauche, haut gauche, bas droite, nvx triangle avec haut droit, etc.
-				for(int d = 0; d < 41; d ++){
 				
-			        g_vertex_buffer_data[0 + i * 12 * 3] =  d*longueurjournee;
-			        g_vertex_buffer_data[1 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;  //FORMULE MAGIQUE
-			        g_vertex_buffer_data[2 + i * 12 * 3] = hauteur;
+				
+				for(int d = 0; d < 40; d ++){
+		//face 1	(vu du haut, pointe vers nous)	
+				//TRIANGLE 1
+			       g_vertex_buffer_data[i][0 + i * 18 ] =  d*longueurjournee-1;
+			        g_vertex_buffer_data[i][1 + i * 18 ] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1; 
+			        g_vertex_buffer_data[i][2 + i * 18 ] = hauteur;
 			
-			        g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
+			        g_vertex_buffer_data[i][3 + i * 18 ]  = d * longueurjournee-1;
+		        	g_vertex_buffer_data[i][4 + i * 18] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1 + epaisseur;
+		        	g_vertex_buffer_data[i][5 + i * 18 ]  = hauteur;
+			
+		        	g_vertex_buffer_data[i][6 + i * 18 ] = d*(longueurjournee +1);
+		        	g_vertex_buffer_data[i][7 + i * 18 ] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;
+		        	g_vertex_buffer_data[i][8 + i * 18] = hauteur;
+
+                    
+
+                 //TRIANGLE 2  
+			
+                    g_vertex_buffer_data[i][9 + i * 18 * 3] =  d*(longueurjournee+1)-1;
+			        g_vertex_buffer_data[i][10 + i * 18 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1 + epaisseur; 
+			        g_vertex_buffer_data[i][11 + i * 18 * 3] = hauteur;
+			
+			        g_vertex_buffer_data[i][12 + i * 18 * 3] = d * longueurjournee-1;
+		        	g_vertex_buffer_data[i][13 + i * 18 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1 + epaisseur;
+		        	g_vertex_buffer_data[i][14 + i * 18 * 3] = hauteur;
+			
+		        	g_vertex_buffer_data[i][15 + i * 18 * 3] = d*(longueurjournee +1)-1;
+		        	g_vertex_buffer_data[i][16 + i * 18 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;
+		        	g_vertex_buffer_data[i][17 + i * 18 * 3] = hauteur;
+			
+			
+			
+			        g_vertex_color_data[i][0 + i * 18 ] = 0.0;
+	                g_vertex_color_data[i][1 + i * 18] = 1.0;
+	                g_vertex_color_data[i][2 + i * 18]= 1.0;
+	                
+	                g_vertex_color_data[i][3 + i * 18] = 0.0;
+	                g_vertex_color_data[i][4 + i * 18 ] = 1.0;
+	                g_vertex_color_data[i][5 + i * 18]= 1.0;
+	                
+	                
+	                g_vertex_color_data[i][6 + i * 18] = 0.0;
+	                g_vertex_color_data[i][7 + i * 18 ] = 1.0;
+	                g_vertex_color_data[i][8 + i * 18 ]= 1.0;
+	                
+	                
+	                g_vertex_color_data[i][9 + i * 18 ] = 0.0;
+	                g_vertex_color_data[i][10 + i * 18 ] = 1.0;
+	                g_vertex_color_data[i][11 + i * 18 ]= 1.0;
+	                
+	                g_vertex_color_data[i][12 + i * 18 ] = 0.0;
+	                g_vertex_color_data[i][13 + i * 18 ] = 1.0;
+	                g_vertex_color_data[i][14 + i * 18 ]= 1.0;
+	                
+	                g_vertex_color_data[i][15 + i * 18 ] = 0.0;
+	                g_vertex_color_data[i][16 + i * 18 ] = 1.0;
+	                g_vertex_color_data[i][17 + i * 18 ]= 1.0;
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+        //face 2 (vu d'en haut pointe vers le bas)
+        /*    //TRIANGLE 3
+		        	g_vertex_buffer_data[i][9 + i * 8 * 3] = d * longueurjournee;
+		        	g_vertex_buffer_data[i][10 + i * 8 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;
+		        	g_vertex_buffer_data[i][11 + i * 8 * 3] = hauteur;
+
+		        	g_vertex_buffer_data[i][6 + i * 12 * 3] = d * longueurjournee;
+		        	g_vertex_buffer_data[i][7 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;
+		        	g_vertex_buffer_data[i][8 + i * 12 * 3] = 0.0;
+
+		        	g_vertex_buffer_data[i][9 + i * 8 * 3] = d * (longueurjournee + 1);
+		        	g_vertex_buffer_data[i][10 + i * 8 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;
+			        g_vertex_buffer_data[i][11 + i * 8 * 3] = 0.0;*/
+                /*
+            //TRIANGLE 4
+		        	g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
 		        	g_vertex_buffer_data[7 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1 + epaisseur;
 		        	g_vertex_buffer_data[8 + i * 12 * 3] = hauteur;
-			
-		        	g_vertex_buffer_data[3 + i * 12 * 3] = d*(longueurjournee +1);
-		        	g_vertex_buffer_data[4 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;
-		        	g_vertex_buffer_data[5 + i * 12 * 3] = hauteur;
-
-			
-
-			
-			
-			
-		        	/*g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
-		        	g_vertex_buffer_data[10 + i * 8 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1 + epaisseur;
-		        	g_vertex_buffer_data[11 + i * 8 * 3] = hauteur;
-
-		        	g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
-		        	g_vertex_buffer_data[7 + i * 12 * 3] = ptst * marge + (eq + 1) * epaisseur;
-		        	g_vertex_buffer_data[8 + i * 12 * 3] = 0.0;
 
 		        	g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
-		        	g_vertex_buffer_data[10 + i * 8 * 3] = ptst * marge + (eq + 1) * epaisseur;
-			        g_vertex_buffer_data[11 + i * 8 * 3] = 0.0;
-
-
-		        	g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
-		        	g_vertex_buffer_data[7 + i * 12 * 3] = ptst * marge + (eq + 1) * epaisseur;
-		        	g_vertex_buffer_data[8 + i * 12 * 3] = 0.0;
-
-		        	g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
-		        	g_vertex_buffer_data[10 + i * 8 * 3] = ptst * marge + (eq + 1) * epaisseur;
+		        	g_vertex_buffer_data[10 + i * 8 * 3] = pts * marge + (eq + 1) * epaisseur;
 	            	g_vertex_buffer_data[11 + i * 8 * 3] = 0.0;
 
-
-
-
-
 		        	g_vertex_buffer_data[0 + i * 12 * 3] = d * longueurjournee;
-		        	g_vertex_buffer_data[1 + i * 12 * 3] = ptst * marge + eq * epaisseur;
+		        	g_vertex_buffer_data[1 + i * 12 * 3] = pts * marge + eq * epaisseur;
 		        	g_vertex_buffer_data[2 + i * 12 * 3] = 0.0;
 
+
+            //TRIANGLE 5
 		        	g_vertex_buffer_data[3 + i * 12 * 3] = d * (longueurjournee + 1);
 		        	g_vertex_buffer_data[4 + i * 12 * 3] = ptst * marge + eq * epaisseur;
-		        	g_vertex_buffer_data[5 + i * 12 * 3] = 0.0;
+		        	g_vertex_buffer_data[5 + i * 12 * 3] = epaisseur;
 
 	            	g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
 		        	g_vertex_buffer_data[7 + i * 12 * 3] = ptst * marge + (eq + 1) * epaisseur;
-	            	g_vertex_buffer_data[8 + i * 12 * 3] = 0.0;
+	            	g_vertex_buffer_data[8 + i * 12 * 3] = epaisseur;
 
 	               	g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
 		        	g_vertex_buffer_data[10 + i * 8 * 3] = ptst * marge + (eq + 1) * epaisseur;
-		        	g_vertex_buffer_data[11 + i * 8 * 3] = 0.0;*/
+		        	g_vertex_buffer_data[11 + i * 8 * 3] = epaisseur;
 		        	
-		        	
+		        	*/
 		        	
 		        	
 		        	
 
                 }
             }
-
+        }
 
 
 
@@ -383,7 +443,137 @@ void showGraph (vector<int> pts, vector<int> ranks, vector<String> teams){
 
 
 
-
+void generateData( vector<int> pts, vector<int> ranks){
+  vertexSize   = 6*18*(N-1)*sizeof(GLfloat);
+  colorSize    = 6*18*(N-1)*sizeof(GLfloat);
+  texCoordSize = 6*18*(N-1)*sizeof(GLfloat);
+ 
+  for(int i = 0; i<20; i++){
+    if (g_vertex_buffer_data[i] != NULL)
+      free(g_vertex_buffer_data[i]);
+   
+    if (g_vertex_color_data[i] != NULL)
+      free(g_vertex_color_data[i]);
+   
+    if (g_vertex_texcoord_data[i] != NULL)
+      free(g_vertex_texcoord_data[i]);
+  }
+  for(int i = 0;i<20; i++){
+    g_vertex_buffer_data[i]    = (GLfloat*)malloc(vertexSize);
+    g_vertex_color_data[i]     = (GLfloat*)malloc(colorSize);
+    g_vertex_texcoord_data[i]  = (GLfloat*)malloc(texCoordSize);
+   
+  }
+ 
+  float rayon = 0.020;
+ 
+  for(int e = 0; e<20; e++){
+    //QUE POUR UNE EQUIPE//
+    //float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+    float r1 = 0;
+    float r2 = 0;
+    float r3 = 0;
+   
+    for (int i=0; i<N-1; i++){
+   
+        float y   = ((((19-ranks[i+41*e])/19.)+(pts[i+41*e]/98.))/2.)*2-1;
+        float yn  = ((((19-ranks[i+41*e+1])/19.)+(pts[i+41*e+1]/98.))/2.)*2-1;
+       
+        float x = ((float) i/ (float) N)*2-1;
+        float xn = ((float) (i+1)/ (float) N)*2-1;
+       
+        float zec = 0;
+       
+        for(int t = 0; t<6; t++){
+          
+          float teta = t*(M_PI/6);
+          if(y>yn){
+            zec = -0.0020;
+          } else {
+            zec = 0.0020;
+          }
+     
+          g_vertex_buffer_data[e][0+(t*18)+i*18*6] = x;
+          g_vertex_buffer_data[e][1+(t*18)+i*18*6] = y+rayon*cos(teta);
+          g_vertex_buffer_data[e][2+(t*18)+i*18*6] = rayon*sin(teta) + zec;
+         
+          g_vertex_buffer_data[e][3+(t*18)+i*18*6] = x;
+          g_vertex_buffer_data[e][4+(t*18)+i*18*6] = y+rayon*cos(teta+M_PI/6);
+          g_vertex_buffer_data[e][5+(t*18)+i*18*6] = rayon*sin(teta+M_PI/6) + zec;
+         
+          g_vertex_buffer_data[e][6+(t*18)+i*18*6] = xn;
+          g_vertex_buffer_data[e][7+(t*18)+i*18*6] = yn+rayon*cos(teta);
+          g_vertex_buffer_data[e][8+(t*18)+i*18*6] = rayon*sin(teta) + zec;
+         
+          g_vertex_buffer_data[e][9+(t*18)+i*18*6] = x;
+          g_vertex_buffer_data[e][10+(t*18)+i*18*6] = y+rayon*cos(teta+M_PI/6);
+          g_vertex_buffer_data[e][11+(t*18)+i*18*6] = rayon*sin(teta+M_PI/6) + zec;
+         
+          g_vertex_buffer_data[e][12+(t*18)+i*18*6] = xn;
+          g_vertex_buffer_data[e][13+(t*18)+i*18*6] = yn+rayon*cos(teta+M_PI/6);
+          g_vertex_buffer_data[e][14+(t*18)+i*18*6] = rayon*sin(teta+M_PI/6) + zec;
+         
+          g_vertex_buffer_data[e][15+(t*18)+i*18*6] = xn;
+          g_vertex_buffer_data[e][16+(t*18)+i*18*6] = yn+rayon*cos(teta);
+          g_vertex_buffer_data[e][17+(t*18)+i*18*6] = rayon*sin(teta) + zec;
+         
+         
+         
+          //Couleurs :
+          if(e==0){
+            r1 = 0.;
+            r2 = 0.;
+            r3 = 1.0;
+          }else if(e<4) {
+            r1 = 0.4;
+            r2 = 0.4;
+            r3 = 1.0;
+          }else if(e<7) {
+            r1 = 1.0;
+            r2 = 1.0;
+            r3 = 0.;
+          }else if(e<11){
+            r1 = 0.7;
+            r2 = 0.7;
+            r3 = 0.7;
+          }else if(e<16){
+            r1 = 0.3;
+            r2 = 0.3;
+            r3 = 0.3;
+          }else {
+            r1 = 1.0;
+            r2 = 0.;
+            r3 = 0.;
+          }
+          float ec = t/12.0 + 0.25;
+          g_vertex_color_data[e][0+(t*18)+i*18*6] = r1*ec;
+          g_vertex_color_data[e][1+(t*18)+i*18*6] = r2*ec;
+          g_vertex_color_data[e][2+(t*18)+i*18*6] = r3*ec;
+         
+          g_vertex_color_data[e][3+(t*18)+i*18*6] = r1*ec;
+          g_vertex_color_data[e][4+(t*18)+i*18*6] = r2*ec;
+          g_vertex_color_data[e][5+(t*18)+i*18*6] = r3*ec;
+         
+          g_vertex_color_data[e][6+(t*18)+i*18*6] = r1*ec;
+          g_vertex_color_data[e][7+(t*18)+i*18*6] = r2*ec;
+          g_vertex_color_data[e][8+(t*18)+i*18*6] = r3*ec;
+         
+          g_vertex_color_data[e][9+(t*18)+i*18*6] = r1*ec;
+          g_vertex_color_data[e][10+(t*18)+i*18*6] = r2*ec;
+          g_vertex_color_data[e][11+(t*18)+i*18*6] = r3*ec;
+         
+          g_vertex_color_data[e][12+(t*18)+i*18*6] = r1*ec;
+          g_vertex_color_data[e][13+(t*18)+i*18*6] = r2*ec;
+          g_vertex_color_data[e][14+(t*18)+i*18*6] = r3*ec;
+         
+          g_vertex_color_data[e][15+(t*18)+i*18*6] = r1*ec;
+          g_vertex_color_data[e][16+(t*18)+i*18*6] = r2*ec;
+          g_vertex_color_data[e][17+(t*18)+i*18*6] = r3*ec;
+      }
+    }
+  }
+ 
+}
 
 /*
 void generateData(float texw, float texh){
@@ -581,7 +771,7 @@ void generateData(float texw, float texh){
   }
 }
 */
-
+/*
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     // on teste si la touche E est pressee et si c'est le cas on re-genere des donnees
@@ -602,7 +792,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     } 
 
 }
-
+*/
 
 void initOpenGL(){
   // Enable depth test
@@ -610,10 +800,10 @@ void initOpenGL(){
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
 	glDepthRange(-1, 1);
-for(int i = 0; i < 20; i ++{
+for(int i = 0; i < 20; i ++){
 	// creation du glVertexAttribPointer
-	glGenVertexArrays(1, &vertexArrayID);
-	glBindVertexArray(vertexArrayID);
+	glGenVertexArrays(1, &vertexArrayID[i]);
+	glBindVertexArray(vertexArrayID[i]);
 
 
 	// Generate 1 buffer, put the resulting identifier in vertexbuffer
@@ -625,13 +815,13 @@ for(int i = 0; i < 20; i ++{
 	  glBufferData(GL_ARRAY_BUFFER, vertexSize+colorSize+texCoordSize, 0, GL_STATIC_DRAW);
 
     // send vertices in the first part of the buffer
-	  glBufferSubData(GL_ARRAY_BUFFER, 0,                            vertexSize, g_vertex_buffer_data);
+	  glBufferSubData(GL_ARRAY_BUFFER, 0,                            vertexSize, g_vertex_buffer_data[i]);
 
 	  // send colors in the second part of the buffer
-	  glBufferSubData(GL_ARRAY_BUFFER, vertexSize, colorSize, g_vertex_color_data);
+	  glBufferSubData(GL_ARRAY_BUFFER, vertexSize, colorSize, g_vertex_color_data[i]);
 
 	  // send tex coords in the third part of the buffer
-	  glBufferSubData(GL_ARRAY_BUFFER, vertexSize+colorSize, texCoordSize, g_vertex_texcoord_data);
+	  glBufferSubData(GL_ARRAY_BUFFER, vertexSize+colorSize, texCoordSize, g_vertex_texcoord_data[i]);
 	
 		// ici les commandes stockees "une fois pour toute" dans le VAO 
 		// avant on faisait ca a chaque dessin
@@ -682,7 +872,7 @@ GLFWwindow *initMainwindow(){
   glfwWindowHint(GLFW_DEPTH_BITS, 24);
 
 	// Ouvre une fenêtre et crée son contexte OpenGl
-	GLFWwindow *win = glfwCreateWindow( winWidth, winHeight, "Main 06", NULL, NULL);
+	GLFWwindow *win = glfwCreateWindow( winWidth, winHeight, "PROJET", NULL, NULL);
 	if( win == NULL ){
 	    fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are maybe not 3.3 compatible. \n" );
 	    glfwTerminate();
@@ -695,7 +885,7 @@ GLFWwindow *initMainwindow(){
 	glfwSetInputMode(win, GLFW_STICKY_KEYS, GL_TRUE);
 
 	// active une callback = une fonction appellee automatiquement quand un evenement arrive 
-	glfwSetKeyCallback(win, key_callback);
+	//glfwSetKeyCallback(win, key_callback);
 
 	return win;
 }
@@ -713,21 +903,23 @@ void draw(){
 	//  matrice de projection proportionelle a la taille de la fenetre
 	mat4 projectionMatrix = ortho( -1.0f, 1.0f, -1.0f*winHeight/winWidth, 1.0f*winHeight/winWidth, -3.f, 3.f );
 	mat4 viewMatrix       = lookAt(
-					                      vec3(1.5*cos(angleRot), 1.5*sin(angleRot), -0.35), // where is the camara
-					                      vec3(0, 0, 0.1), //where it looks
-					                      vec3(0, 0, 1.0) // head is up
+					                      vec3(1.5*cos(angleRot), 1.5*sin(angleRot), -0.35), // where is the camera
+					                      vec3(0.5, 0.5, 0), //where it looks
+					                      vec3(0, 1.0, 0) // head is up
 					                    );
 	mat4 modelMatrix      = mat4(1.0);
 
   glUniformMatrix4fv(uniform_proj,  1, GL_FALSE, value_ptr(projectionMatrix));
   glUniformMatrix4fv(uniform_view,  1, GL_FALSE, value_ptr(viewMatrix));
+  
+  for(int i = 0; i < 20 ; i++){
   glUniformMatrix4fv(uniform_model, 1, GL_FALSE, value_ptr(modelMatrix));
 
   // La texture aussi est donnee en variable uniforme. On lui donne le No 0
 	glUniform1i(uniform_texture, 0);
 
   // on re-active le VAO avant d'envoyer les buffers
-  glBindVertexArray(vertexArrayID);
+  glBindVertexArray(vertexArrayID[i]);
 
 	// On active la texture 0
 	glActiveTexture(GL_TEXTURE0);
@@ -743,7 +935,7 @@ void draw(){
 
 	// on desactive le VAO a la fin du dessin
 	glBindVertexArray (0);
-
+    }
 	// on desactive les shaders
 	glUseProgram(0);
 
@@ -772,16 +964,14 @@ string DeathToSpace(string a)
     return a;
 }
 
-float 
 
-void loadData(string fn, vector<int> &pts, vector<int> &ranks)
+void loadData(string fn, vector<int> &pts, vector<int> &ranks, vector<String> &nomTeam)
 {
     	ifstream file (fn); // declare file stream: Http://Www.Cplusplus.Com/Reference/Iostream/Ifstream/http://www.cplusplus.com/reference/iostream/ifstream/
     	int points [20][41];
     	int rk [20][41];
     	int nbequipe = 20;
         int nbj = 41;
-    	vector<string> nomTeam;
         string value;
     	for(int i = 0; i < nbequipe*nbj ; i++)
         {
@@ -801,7 +991,7 @@ void loadData(string fn, vector<int> &pts, vector<int> &ranks)
             if (i % 41 == 40)
              getline(file, value, '\n');     
         }
-        
+      /*  
         
     //Initiialisaton     
     vertexSize   =98*3*sizeof(GLfloat);
@@ -839,6 +1029,7 @@ void loadData(string fn, vector<int> &pts, vector<int> &ranks)
     	
     	}
 	}
+	*/
 }
 
 
@@ -863,16 +1054,23 @@ int main(){
 	}
 	
   texId = LoadTexture("font.png");
-  
-	generateData(texWidth, texHeight);
+    
+    String fn = "data/rankspts.csv" ;
+    vector<int> pts ;
+    vector<int> ranks ;
+    vector<String> teams;
+    loadData(fn, pts, ranks, teams);
+    
+	//showGraph(pts, ranks, teams);  //
+    //generateData(pts, ranks);
 
 	initOpenGL();
 
 	programID = LoadShaders( "SimpleVertexShader6.vertexshader", "SimpleFragmentShader6.fragmentshader" );
-	uniform_proj    = glGetUniformLocation(progID, "projectionMatrix");
-	uniform_view    = glGetUniformLocation(progID, "viewMatrix");
-	uniform_model   = glGetUniformLocation(progID, "modelMatrix");
-	uniform_texture = glGetUniformLocation(progID, "loctexture");
+	uniform_proj    = glGetUniformLocation(programID, "projectionMatrix");
+	uniform_view    = glGetUniformLocation(programID, "viewMatrix");
+	uniform_model   = glGetUniformLocation(programID, "modelMatrix");
+	uniform_texture = glGetUniformLocation(programID, "loctexture");
 
   double before = glfwGetTime();
   int cpt = 0;

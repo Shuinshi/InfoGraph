@@ -45,14 +45,12 @@ string DeathToSpace(string a)
     }
     return a;
 }
-void loadData(string fn, vector<int> &pts, vector<int> &ranks)
+void loadData(string fn, vector<int> &pts, vector<int> &ranks, vector<string> &nomTeam)
 {
     	ifstream file (fn); // declare file stream: Http://Www.Cplusplus.Com/Reference/Iostream/Ifstream/http://www.cplusplus.com/reference/iostream/ifstream/
-    	int points [20][38];
-    	int rk [20][38];
+    	
     	int nbequipe = 20;
         int nbj = 41;
-    	vector<string> nomTeam;
         string value;
     	for(int i = 0; i < nbequipe*nbj ; i++)
         {
@@ -85,14 +83,20 @@ int main(void)
 	int j = 0;
 	vector<int> pts;
 	vector<int> ranks;
-	loadData("data/rankspts.csv",pts,ranks);
+	vector<string> nomTeam;
+	loadData("data/rankspts.csv",pts,ranks, nomTeam);
 	cout << pts.size()<<endl;
 	cout << ranks.size()<<endl;
-	while(j < pts.size())
+	cout << nomTeam.size() << endl;
+	cout << "Points" << "                         " << "Ranks" << endl;
+	while(j < nomTeam.size())
 	{
-		cout << pts[j] << endl;
-		cout << ranks[j] << endl;
-		j++;
+	    cout << nomTeam[j] << endl;
+	    for(int i = 0; i < 41; i++){
+		    cout << pts[i+41*j] << "                         " << ranks[i+41*j] << endl;
+		    
+		    }
+	    j++;	    
 	}
 	return (0);
 }
