@@ -238,13 +238,13 @@ void showGraph (vector<int> pts, vector<int> ranks, vector<String> teams){
 	
 
 
-    int nbteams = teams.size();
-    int nbdays = 41;
-    vector<int> absc;
-	int epaisseur = winHeight / 40;
-	int hauteur = 10;
-	int marge = 5;
-	int longueurjournee = winWidth / 41;
+    float nbteams = teams.size();
+    float nbdays = 41;
+    vector<float> absc;
+	float epaisseur = winHeight / 40;
+	float hauteur = 10;
+	float marge = 5;
+	float longueurjournee = winWidth / 41;
 	vector<int> ptsvu;                  //recherche d'égalité en pts chaque jour
 	vector<int> ptseq;
 
@@ -253,7 +253,8 @@ void showGraph (vector<int> pts, vector<int> ranks, vector<String> teams){
 	vertexSize =12 * nbdays * 3 * sizeof(GLfloat);  //*nbteams
 	colorSize = 12 * nbdays * 3 * sizeof(GLfloat);  //*nbteams
 	texCoordSize = 3 * 2 * 5 * N * sizeof(GLfloat);
-
+    
+    /*
 	if (g_vertex_buffer_data[i] != NULL)
 		free(g_vertex_buffer_data[i]);
 
@@ -263,10 +264,8 @@ void showGraph (vector<int> pts, vector<int> ranks, vector<String> teams){
 	if (g_vertex_texcoord_data != NULL)
 		free(g_vertex_texcoord_data);
 
-	g_vertex_buffer_data = (GLfloat*)malloc(vertexSize);
-	g_vertex_color_data = (GLfloat*)malloc(colorSize);
-	g_vertex_texcoord_data = (GLfloat*)malloc(texCoordSize);
-
+	
+    */
 
 
 	//for (int d = 0; d < nbdays; d++) {   //Moyen de trouver les abscisses?
@@ -292,6 +291,9 @@ void showGraph (vector<int> pts, vector<int> ranks, vector<String> teams){
 				ptsvu.erase(doublon);
 		}
 		*/
+		/*g_vertex_buffer_data = (GLfloat*)malloc(vertexSize);
+	    g_vertex_color_data = (GLfloat*)malloc(colorSize);
+	    g_vertex_texcoord_data = (GLfloat*)malloc(texCoordSize);*/
 		for(int i = 0; i < 1; i ++){
 			/*int minrank = min_element(ranksd.begin(), ranksd.end());
 			int index = find(ranksd.begin(), ranksd.end(), minrank) - ranksd.begin();
@@ -299,65 +301,73 @@ void showGraph (vector<int> pts, vector<int> ranks, vector<String> teams){
 			if (find(ptseq.begin(), ptseq.end(), ptst) != ptseq.end())
 				eq++;*/
 				//il me semble que dans l'ordre cest bas gauche, haut gauche, bas droite, nvx triangle avec haut droit, etc.
-			g_vertex_buffer_data[0 + i * 12 * 3] = d*longueurjournee;
-			g_vertex_buffer_data[1 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;  //FORMULE MAGIQUE
-			g_vertex_buffer_data[2 + i * 12 * 3] = hauteur;
+				for(int d = 0; d < 41; d ++){
+				
+			        g_vertex_buffer_data[0 + i * 12 * 3] =  d*longueurjournee;
+			        g_vertex_buffer_data[1 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;  //FORMULE MAGIQUE
+			        g_vertex_buffer_data[2 + i * 12 * 3] = hauteur;
 			
-			g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
-			g_vertex_buffer_data[7 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1 + epaisseur;
-			g_vertex_buffer_data[8 + i * 12 * 3] = hauteur;
+			        g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
+		        	g_vertex_buffer_data[7 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1 + epaisseur;
+		        	g_vertex_buffer_data[8 + i * 12 * 3] = hauteur;
 			
-			g_vertex_buffer_data[3 + i * 12 * 3] = d*(longueurjournee +1);
-			g_vertex_buffer_data[4 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;
-			g_vertex_buffer_data[5 + i * 12 * 3] = hauteur;
-
-			
+		        	g_vertex_buffer_data[3 + i * 12 * 3] = d*(longueurjournee +1);
+		        	g_vertex_buffer_data[4 + i * 12 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1;
+		        	g_vertex_buffer_data[5 + i * 12 * 3] = hauteur;
 
 			
+
 			
 			
-			g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
-			g_vertex_buffer_data[10 + i * 8 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1 + epaisseur;
-			g_vertex_buffer_data[11 + i * 8 * 3] = hauteur;
+			
+		        	/*g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
+		        	g_vertex_buffer_data[10 + i * 8 * 3] = (19-ranks[d+41*i])/19 + pts[d+41*i]/98 -1 + epaisseur;
+		        	g_vertex_buffer_data[11 + i * 8 * 3] = hauteur;
 
-			g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
-			g_vertex_buffer_data[7 + i * 12 * 3] = ptst * marge + (eq + 1) * epaisseur;
-			g_vertex_buffer_data[8 + i * 12 * 3] = 0.0;
+		        	g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
+		        	g_vertex_buffer_data[7 + i * 12 * 3] = ptst * marge + (eq + 1) * epaisseur;
+		        	g_vertex_buffer_data[8 + i * 12 * 3] = 0.0;
 
-			g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
-			g_vertex_buffer_data[10 + i * 8 * 3] = ptst * marge + (eq + 1) * epaisseur;
-			g_vertex_buffer_data[11 + i * 8 * 3] = 0.0;
-
-
-			g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
-			g_vertex_buffer_data[7 + i * 12 * 3] = ptst * marge + (eq + 1) * epaisseur;
-			g_vertex_buffer_data[8 + i * 12 * 3] = 0.0;
-
-			g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
-			g_vertex_buffer_data[10 + i * 8 * 3] = ptst * marge + (eq + 1) * epaisseur;
-			g_vertex_buffer_data[11 + i * 8 * 3] = 0.0;
+		        	g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
+		        	g_vertex_buffer_data[10 + i * 8 * 3] = ptst * marge + (eq + 1) * epaisseur;
+			        g_vertex_buffer_data[11 + i * 8 * 3] = 0.0;
 
 
+		        	g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
+		        	g_vertex_buffer_data[7 + i * 12 * 3] = ptst * marge + (eq + 1) * epaisseur;
+		        	g_vertex_buffer_data[8 + i * 12 * 3] = 0.0;
+
+		        	g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
+		        	g_vertex_buffer_data[10 + i * 8 * 3] = ptst * marge + (eq + 1) * epaisseur;
+	            	g_vertex_buffer_data[11 + i * 8 * 3] = 0.0;
 
 
 
-			g_vertex_buffer_data[0 + i * 12 * 3] = d * longueurjournee;
-			g_vertex_buffer_data[1 + i * 12 * 3] = ptst * marge + eq * epaisseur;
-			g_vertex_buffer_data[2 + i * 12 * 3] = 0.0;
-
-			g_vertex_buffer_data[3 + i * 12 * 3] = d * (longueurjournee + 1);
-			g_vertex_buffer_data[4 + i * 12 * 3] = ptst * marge + eq * epaisseur;
-			g_vertex_buffer_data[5 + i * 12 * 3] = 0.0;
-
-			g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
-			g_vertex_buffer_data[7 + i * 12 * 3] = ptst * marge + (eq + 1) * epaisseur;
-			g_vertex_buffer_data[8 + i * 12 * 3] = 0.0;
-
-			g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
-			g_vertex_buffer_data[10 + i * 8 * 3] = ptst * marge + (eq + 1) * epaisseur;
-			g_vertex_buffer_data[11 + i * 8 * 3] = 0.0;
 
 
+		        	g_vertex_buffer_data[0 + i * 12 * 3] = d * longueurjournee;
+		        	g_vertex_buffer_data[1 + i * 12 * 3] = ptst * marge + eq * epaisseur;
+		        	g_vertex_buffer_data[2 + i * 12 * 3] = 0.0;
+
+		        	g_vertex_buffer_data[3 + i * 12 * 3] = d * (longueurjournee + 1);
+		        	g_vertex_buffer_data[4 + i * 12 * 3] = ptst * marge + eq * epaisseur;
+		        	g_vertex_buffer_data[5 + i * 12 * 3] = 0.0;
+
+	            	g_vertex_buffer_data[6 + i * 12 * 3] = d * longueurjournee;
+		        	g_vertex_buffer_data[7 + i * 12 * 3] = ptst * marge + (eq + 1) * epaisseur;
+	            	g_vertex_buffer_data[8 + i * 12 * 3] = 0.0;
+
+	               	g_vertex_buffer_data[9 + i * 8 * 3] = d * (longueurjournee + 1);
+		        	g_vertex_buffer_data[10 + i * 8 * 3] = ptst * marge + (eq + 1) * epaisseur;
+		        	g_vertex_buffer_data[11 + i * 8 * 3] = 0.0;*/
+		        	
+		        	
+		        	
+		        	
+		        	
+
+                }
+            }
 
 
 
