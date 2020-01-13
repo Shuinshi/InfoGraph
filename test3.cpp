@@ -3,7 +3,7 @@
 // ./main6
 
 // sous linux 	
-// g++ -I/usr/local/include/ -I/public/ig/glm/ -c main6.cpp  -omain6.o
+// g++ -I/usr/local/include/ -I/public/ig/glm/ -c test3.cpp  -otest3.o
 // g++ -I/usr/local test3.o -lglfw  -lGLEW  -lGL -lopencv_core -lopencv_imgproc -lopencv_highgui  -lopencv_imgcodecs -otest3
 // ./test3
 
@@ -14,6 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <math.h>
 using namespace std;
 
 #include <stdlib.h>
@@ -237,7 +238,7 @@ void showGraph(vector<int> pts, vector<int> ranks, vector<String> teams) {
 
 
 	float pi = 3.14159;
-	float angle = = 1 / 4;
+	float angle = 1 / 4;
 	float nbteams = teams.size();
 	float nbdays = 41;
 	float epaisseur = winHeight / 100;
@@ -246,7 +247,7 @@ void showGraph(vector<int> pts, vector<int> ranks, vector<String> teams) {
 
 
 
-	vertexSize = 12 * nbdays * 3 * sizeof(GLfloat);  //*nbteams
+	vertexSize = 12. * nbdays * 3. * sizeof(GLfloat);  //*nbteams
 	colorSize = 12 * nbdays * 3 * sizeof(GLfloat);  //*nbteams
 	texCoordSize = 3 * 2 * 5 * N * sizeof(GLfloat);
 
@@ -306,8 +307,32 @@ void showGraph(vector<int> pts, vector<int> ranks, vector<String> teams) {
 			float x = (float)d / 41. - 1;
 			float y = (19 - ranks[d + 41 * i]) / 19. + pts[d + 41 * i] / 98. - 1;
 			for (int f = 0; f < 8; f++) {
-
-
+                float c1, c2, c3;
+                if(i==0){
+                    c1 = 0.;
+                    c2 = 0.;
+                    c3 = 1.0;
+                }else if(i<4) {
+                    c1 = 0.4;
+                    c2 = 0.4;
+                    c3 = 1.0;
+                }else if(i<7) {
+                    c1 = 1.0;
+                    c2 = 1.0;
+                    c3 = 0.;
+                }else if(i<11){
+                    c1 = 0.7;
+                    c2 = 0.7;
+                    c3 = 0.7;
+                }else if(i<16){
+                    c1 = 0.3;
+                    c2 = 0.3;
+                    c3 = 0.3;
+                }else {
+                    c1 = 1.0;
+                    c2 = 0.;
+                    c3 = 0.;
+                }
 
 
 
@@ -711,17 +736,20 @@ void generateData(float texw, float texh){
 }
 */
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods, vector<int> pts, vector<int> ranks, vector<String> teams)
 {
     // on teste si la touche E est pressee et si c'est le cas on re-genere des donnees
     if (key== GLFW_KEY_E && action == GLFW_PRESS){
 	    
-	    generateData(texWidth, texHeight);
+	    showGraph(pts, ranks, teams);
     	// ici on n'envoie que les sommets car on souhaite garder les memes couleurs ... et le nombre
 	    // n'a pas change !
-    	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    	glBufferSubData(GL_ARRAY_BUFFER, 0,                            vertexSize, g_vertex_buffer_data);
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
+        for(int i = 0; i<20; i++){    
+    	    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	        glBufferSubData(GL_ARRAY_BUFFER, 0, vertexSize, g_vertex_buffer_data[i]);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+        
     } else if (key== GLFW_KEY_LEFT && action == GLFW_PRESS ){
 	    speed = speed - 1.0/256.0;
     } else if (key== GLFW_KEY_RIGHT && action == GLFW_PRESS){
