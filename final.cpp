@@ -44,7 +44,7 @@ using namespace glm;
 // Le nombre de donnees
 const int N = 41;
 
-
+//Quelques variables globales pour l'affichage
 float rad = 1.0;
 float posx = 0.;
 float posy = 0.;
@@ -158,7 +158,7 @@ void loadData(string fn, vector<vector<int>> &pts, vector<vector<int>> &ranks, v
 }
 
 
-void affiche(vector<vector<int>> pts, vector<vector<int>> ranks, vector<string>nomTeam){
+void show(vector<vector<int>> pts, vector<vector<int>> ranks, vector<string>nomTeam){
   for(int i = 0; i<20; i++){
     cout<<nomTeam[i]<<" : "<<endl;
     for(int j = 0; j<41; j++){
@@ -267,13 +267,11 @@ GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path
 }
 /*   Notre fonction qui créé notre graphique des équipes, 
 	prends en parametre le tableau des points, du classement et genere les données de notre graphe.
-	@param {float} texw -
-        {float} texh - 
-      {vector<vector<int>>} pts - Notre tableau de tableau du nombre de points de chaque équipes pour chaque journée.
-			{vector<vector<int>>} ranks - Notre tableau de tableau du rang de chaque équipe pour chaque journée.
+	@param  {vector<vector<int>>} pts - Notre tableau de tableau du nombre de points de chaque équipes pour chaque journée.
+		{vector<vector<int>>} ranks - Notre tableau de tableau du rang de chaque équipe pour chaque journée.
 */
 
-void generateData(float texw, float texh, vector<vector<int>> pts, vector<vector<int>> ranks){
+void generateData(vector<vector<int>> pts, vector<vector<int>> ranks){
   vertexSize   = 6*18*(N-1)*sizeof(GLfloat);
   colorSize    = 6*18*(N-1)*sizeof(GLfloat);
   texCoordSize = 6*18*(N-1)*sizeof(GLfloat);
@@ -297,7 +295,7 @@ void generateData(float texw, float texh, vector<vector<int>> pts, vector<vector
   
   float r = 0.020;
   
-  for(int e = 0; e<20; e++){  //QUE POUR UNE EQUIPE
+  for(int e = 0; e<20; e++){  //Pour chaque équipe
     
     float c1 = 0;
     float c2 = 0;
@@ -596,7 +594,8 @@ int main(){
   }
   
   loadData(fn, pts, ranks, nomTeam);
-  
+  //show(pts, ranks, nomTeam);
+	
   if( !glfwInit() ) {
     fprintf( stderr, "Failed to initialize GLFW\n" );
     return -1;
@@ -613,7 +612,7 @@ int main(){
   
   texId = LoadTexture("font.png");
   
-  generateData(texWidth, texHeight, pts, ranks);
+  generateData(pts, ranks);
   
   initOpenGL();
   
