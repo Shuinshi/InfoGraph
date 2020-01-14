@@ -474,10 +474,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       rad = rad-0.1;
     if (glfwGetKey(window, GLFW_KEY_DOWN ) == GLFW_PRESS)
       rad = rad+0.1;
-    if (glfwGetKey(window, GLFW_KEY_RIGHT ) == GLFW_PRESS)
-      angleRot = (angleRot+M_PI/1000);
-    if (glfwGetKey(window, GLFW_KEY_LEFT ) == GLFW_PRESS)
-      angleRot = (angleRot-M_PI/1000);
     if (glfwGetKey(window, GLFW_KEY_A ) == GLFW_PRESS)
       posx = posx - 0.1;
     if (glfwGetKey(window, GLFW_KEY_D ) == GLFW_PRESS)
