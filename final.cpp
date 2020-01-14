@@ -356,13 +356,13 @@ void generateData(float texw, float texh, vector<vector<int>> pts, vector<vector
             c2 = 1.0;
             c3 = 0.;
           }else if(e<11){
-            c1 = 0.7;
-            c2 = 0.7;
-            c3 = 0.7;
+            c1 = 0.2;
+            c2 = 0.6;
+            c3 = 0.5;
           }else if(e<16){
-            c1 = 0.3;
+            c1 = 0.0;
             c2 = 0.3;
-            c3 = 0.3;
+            c3 = 0.1;
           }else {
             c1 = 1.0;
             c2 = 0.;
