@@ -132,7 +132,15 @@ GLuint LoadTexture(string fileName){
   
   return tId;
 }
-
+/*   Notre fonction qui charge dans des tableaux les données à récuperer, 
+	prend en parametre le nom du fichier d'ou on récupere les données, les 3 tableaux dans lequel on va mettre le nombre de points,
+  le rang et le nom de chaque équipe.
+	 
+  @param {string} fn - le nom du fichier contenant nos données.
+  @param {vector<vector<int>>} pts - Notre tableau de tableau du nombre de points de chaque équipes pour chaque journée.
+	@param {vector<vector<int>>} ranks - Notre tableau de tableau du rang de chaque équipe pour chaque journée.
+  @param {vector<string>} nomTeam - Tableau contenant le nom de chaque équipe.
+*/
 
 void loadData(string fn, vector<vector<int>> &pts, vector<vector<int>> &ranks, vector<string>&nomTeam){
   ifstream file (fn);
@@ -268,7 +276,7 @@ GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path
 /*   Notre fonction qui créé notre graphique des équipes, 
 	prends en parametre le tableau des points, du classement et genere les données de notre graphe.
 	@param  {vector<vector<int>>} pts - Notre tableau de tableau du nombre de points de chaque équipes pour chaque journée.
-		{vector<vector<int>>} ranks - Notre tableau de tableau du rang de chaque équipe pour chaque journée.
+	@param 	{vector<vector<int>>} ranks - Notre tableau de tableau du rang de chaque équipe pour chaque journée.
 */
 
 void generateData(vector<vector<int>> pts, vector<vector<int>> ranks){
