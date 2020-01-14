@@ -265,7 +265,13 @@ GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path
   
   return progID;
 }
-
+/*   Notre fonction qui créé notre graphique des équipes, 
+	prends en parametre le tableau des points, du classement et genere les données de notre graphe.
+	@param {float} texw -
+        {float} texh - 
+      {vector<vector<int>>} pts - Notre tableau de tableau du nombre de points de chaque équipes pour chaque journée.
+			{vector<vector<int>>} ranks - Notre tableau de tableau du rang de chaque équipe pour chaque journée.
+*/
 
 void generateData(float texw, float texh, vector<vector<int>> pts, vector<vector<int>> ranks){
   vertexSize   = 6*18*(N-1)*sizeof(GLfloat);
