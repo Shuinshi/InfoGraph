@@ -233,9 +233,13 @@ GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path
 
 	return programID;
 }
-
+/*   Notre fonction qui créé notre graphique des équipes, 
+	prends en parametre le tableau des points, du classement et du nom des équipes et genere les données de notre graphe.
+	@param {vector<int>} pts - Notre tableau du nombre de points de chaque équipes pour chaque journée.
+			{vector<int>} ranks - Notre tableau du rang de chaque équipe pour chaque journée.
+			{vector <int>} teams - Un tableau contenant le nom de chaque équipe du championnat.
+*/
 void showGraph(vector<int> pts, vector<int> ranks, vector<String> teams) {
-
 
 	float pi = 3.14159;
 	float angle = 1 / 4;
